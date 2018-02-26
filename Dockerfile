@@ -10,7 +10,7 @@ ENV INITSYSTEM=on \
     USE_HOSTNAME_SUFFIX=FALSE \
     DATADIR=/data/storj \
     WALLET_ADDRESS= \
-    SHARE_SIZE=10GB \
+    SHARE_SIZE=1TB \
     RPCADDRESS=0.0.0.0
 
 VOLUME ["/data/storj"]
