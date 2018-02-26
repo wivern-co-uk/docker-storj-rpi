@@ -1,4 +1,4 @@
-FROM resin/raspberry-pi-alpine-node
+FROM resin/raspberry-pi-alpine
 
 RUN apk add --no-cache nodejs g++ gcc git make bash python && \
 		export MAKEFLAGS=-j8 && \
