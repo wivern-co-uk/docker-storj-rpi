@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:3.4
+FROM easypi/alpine-arm:3.4
 RUN apk add --no-cache nodejs
 
 RUN \
