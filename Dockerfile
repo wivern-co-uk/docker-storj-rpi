@@ -8,11 +8,14 @@ RUN \
 	npm cache clear --force && \
 	apk del --no-cache g++ gcc git make bash python
 
-ENV USE_HOSTNAME_SUFFIX=FALSE
-ENV DATADIR=/storj
-ENV WALLET_ADDRESS=
-ENV SHARE_SIZE=1TB
-ENV RPCADDRESS=0.0.0.0
+ENV USE_HOSTNAME_SUFFIX=FALSE \
+    DATADIR=/storj \
+    WALLET_ADDRESS= \
+    SHARE_SIZE=1TB \
+    RPCADDRESS=0.0.0.0 \
+		MOUNT_SOURCE=/dev/sda1 \
+		MOUNT_DEST=/mnt/storage
+
 EXPOSE 4000-4003/tcp
 
 ADD versions entrypoint /

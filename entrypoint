@@ -5,6 +5,12 @@ if [ -z "${WALLET_ADDRESS}" ]; then
 	exit 1;
 fi;
 
+if [ -n "${MOUNT_DEST}" ]; then
+	mkdir -pv "${MOUNT_DEST}";
+	mount "${MOUNT_SOURCE}" "${MOUNT_DEST}"
+	df;
+fi;
+
 # If our hostname has a hyphen-delimited suffix with a unique identifier, e.g. the ordinal if
 #    we're in a Kubernetes statefulset, use that suffix as a subdirectry in the main DATADIR
 if [ "$(echo "${USE_HOSTNAME_SUFFIX}" | tr /a-z/ /A-Z/)" == 'TRUE' ]; then
@@ -12,7 +18,7 @@ if [ "$(echo "${USE_HOSTNAME_SUFFIX}" | tr /a-z/ /A-Z/)" == 'TRUE' ]; then
 fi;
 
 storjshare daemon -F &
-sleep 1;
+sleep 3;
 
 mkdir -pv "${DATADIR}/share" "${DATADIR}/log";
 if [ ! -f "${DATADIR}/config.json" ]; then
@@ -21,4 +27,3 @@ fi;
 
 storjshare start --config "${DATADIR}/config.json";
 wait;
-
