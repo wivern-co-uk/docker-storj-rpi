@@ -12,10 +12,8 @@ ENV USE_HOSTNAME_SUFFIX=FALSE \
     DATADIR=/storj \
     WALLET_ADDRESS= \
     SHARE_SIZE=1TB \
-    RPCADDRESS=0.0.0.0 \
-		MOUNT_SOURCE=/dev/sda1 \
-		MOUNT_DEST=/mnt/storage
-
+    RPCADDRESS=0.0.0.0
+		
 EXPOSE 4000-4003/tcp
 
 ADD versions entrypoint /
