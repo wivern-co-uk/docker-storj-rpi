@@ -11,6 +11,12 @@ if [ "$(echo "${USE_HOSTNAME_SUFFIX}" | tr /a-z/ /A-Z/)" == 'TRUE' ]; then
 	DATADIR="${DATADIR}/$(hostname | rev | cut -d- -f1 | rev)";
 fi;
 
+# Determine total device capacity automatically
+if [ -z "${SHARE_SIZE}" ]; then
+	SHARE_SIZE="$(df -Pm ${DATADIR} | tail -1 | awk '{print $4}')MB"
+	echo "!!! SHARE_SIZE not specified, using maximum capacity: ${SHARE_SIZE}";
+fi;
+
 storjshare daemon -F &
 sleep 3;
 

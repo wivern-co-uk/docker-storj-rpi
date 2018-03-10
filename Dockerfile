@@ -11,9 +11,9 @@ RUN \
 ENV USE_HOSTNAME_SUFFIX=FALSE \
     DATADIR=/storj \
     WALLET_ADDRESS= \
-    SHARE_SIZE=1TB \
+    SHARE_SIZE= \
     RPCADDRESS=0.0.0.0
-		
+
 EXPOSE 4000-4003/tcp
 
 ADD versions entrypoint /
