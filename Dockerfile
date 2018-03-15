@@ -1,20 +1,25 @@
-FROM easypi/alpine-arm:3.4
-RUN apk add --no-cache nodejs
+FROM easypi/alpine-arm:edge
 
 RUN \
-	apk add --no-cache g++ gcc git make bash python && \
+	apk add --no-cache nodejs nodejs-npm g++ gcc git make bash python && \
+	echo "node version: $(node --version)" && \
+	echo "npm version: $(npm --version)" && \
 	export MAKEFLAGS=-j8 && \
-	npm install -g storjshare-daemon && \
-	npm cache clear --force && \
-	apk del --no-cache g++ gcc git make bash python
+	npm config set unsafe-perm true && \
+	npm install --global storjshare-daemon && \
+	npm cache clean --force && \
+	apk del --no-cache nodejs-npm g++ gcc git make bash python
 
-ENV USE_HOSTNAME_SUFFIX=FALSE \
-    DATADIR=/storj \
+RUN \
+	apk add --no-cache hfsprogs --repository http://nl.alpinelinux.org/alpine/edge/testing
+
+ENV DATADIR=/data/storj \
     WALLET_ADDRESS= \
     SHARE_SIZE= \
-    RPCADDRESS=0.0.0.0
+    RPC_ADDRESS="0.0.0.0" \
+    RPC_PORT="4000"
 
-EXPOSE 4000-4003/tcp
+EXPOSE 80
 
 ADD versions entrypoint /
 ENTRYPOINT ["/entrypoint"]

@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 if [ -z "${WALLET_ADDRESS}" ]; then
-	echo "!!! WALLET_ADDRESS must be set to an ERC20 wallet address";
+	echo "WALLET_ADDRESS must be set to an ERC20 wallet address";
 	exit 1;
 fi;
 
@@ -14,7 +14,7 @@ fi;
 # Determine total device capacity automatically
 if [ -z "${SHARE_SIZE}" ]; then
 	SHARE_SIZE="$(df -Pm ${DATADIR} | tail -1 | awk '{print $4}')MB"
-	echo "!!! SHARE_SIZE not specified, using maximum capacity: ${SHARE_SIZE}";
+	echo "SHARE_SIZE not specified, using maximum capacity: ${SHARE_SIZE}";
 fi;
 
 storjshare daemon -F &
@@ -22,7 +22,7 @@ sleep 3;
 
 mkdir -pv "${DATADIR}/share" "${DATADIR}/log";
 if [ ! -f "${DATADIR}/config.json" ]; then
-	storjshare create --storj "${WALLET_ADDRESS}" --storage "${DATADIR}/share" --size "${SHARE_SIZE}" --rpcport 4000 --rpcaddress "${RPCADDRESS}" --tunnelportmin 4001 --tunnelportmax 4003 --logdir "${DATADIR}/log" --outfile "${DATADIR}/config.json" --noedit;
+	storjshare create --storj "${WALLET_ADDRESS}" --storage "${DATADIR}/share" --size "${SHARE_SIZE}" --rpcport "${RPC_PORT}" --rpcaddress "${RPC_ADDRESS}" --logdir "${DATADIR}/log" --outfile "${DATADIR}/config.json" --noedit;
 fi;
 
 storjshare start --config "${DATADIR}/config.json";
