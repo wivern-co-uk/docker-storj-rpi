@@ -1,5 +1,11 @@
 #!/bin/sh -e
 
+if [[ -n "${MOUNT_SOURCE}" && -n "${MOUNT_DEST}" ]]; then
+	echo "Mounting ${MOUNT_SOURCE} to ${MOUNT_DEST}";
+	mkdir -pv "${MOUNT_DEST}";
+	mount "${MOUNT_SOURCE}" "${MOUNT_DEST}";
+fi;
+
 if [ -z "${WALLET_ADDRESS}" ]; then
 	echo "WALLET_ADDRESS must be set to an ERC20 wallet address";
 	exit 1;

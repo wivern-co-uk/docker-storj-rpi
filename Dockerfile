@@ -11,15 +11,15 @@ RUN \
 	apk del --no-cache nodejs-npm g++ gcc git make bash python
 
 RUN \
-	apk add --no-cache hfsprogs --repository http://nl.alpinelinux.org/alpine/edge/testing
+	apk add --no-cache git curl
 
 ENV DATADIR=/data/storj \
+    MOUNT_SOURCE= \
+    MOUNT_DEST= \
     WALLET_ADDRESS= \
     SHARE_SIZE= \
     RPC_ADDRESS="0.0.0.0" \
-    RPC_PORT="4000"
-
-EXPOSE 80
+    RPC_PORT="80"
 
 ADD versions entrypoint /
 ENTRYPOINT ["/entrypoint"]
