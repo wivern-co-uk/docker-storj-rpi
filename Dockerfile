@@ -10,9 +10,6 @@ RUN \
 	npm cache clean --force && \
 	apk del --no-cache nodejs-npm g++ gcc git make bash python
 
-RUN \
-	apk add --no-cache git curl
-
 ENV DATADIR=/data/storj \
     MOUNT_SOURCE= \
     MOUNT_DEST= \
@@ -20,6 +17,16 @@ ENV DATADIR=/data/storj \
     SHARE_SIZE= \
     RPC_ADDRESS="0.0.0.0" \
     RPC_PORT="80"
+
+RUN \
+	apk add --no-cache nodejs nodejs-npm git build-base python && \
+	git clone https://github.com/calxibe/StorjMonitor.git && \
+	cd StorjMonitor && \
+	rm -rf node_modules && \
+	npm install --production && \
+	apk del --no-cache nodejs-npm git build-base python
+
+ENV STORJSTAT_KEY=
 
 ADD versions entrypoint /
 ENTRYPOINT ["/entrypoint"]

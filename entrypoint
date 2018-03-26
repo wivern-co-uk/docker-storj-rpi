@@ -17,6 +17,9 @@ if [ "$(echo "${USE_HOSTNAME_SUFFIX}" | tr /a-z/ /A-Z/)" == 'TRUE' ]; then
 	DATADIR="${DATADIR}/$(hostname | rev | cut -d- -f1 | rev)";
 fi;
 
+# Create data dir
+mkdir -pv "${DATADIR}/share" "${DATADIR}/log";
+
 # Determine total device capacity automatically
 if [ -z "${SHARE_SIZE}" ]; then
 	SHARE_SIZE="$(df -Pm ${DATADIR} | tail -1 | awk '{print $4}')MB"
@@ -26,10 +29,18 @@ fi;
 storjshare daemon -F &
 sleep 3;
 
-mkdir -pv "${DATADIR}/share" "${DATADIR}/log";
 if [ ! -f "${DATADIR}/config.json" ]; then
 	storjshare create --storj "${WALLET_ADDRESS}" --storage "${DATADIR}/share" --size "${SHARE_SIZE}" --rpcport "${RPC_PORT}" --rpcaddress "${RPC_ADDRESS}" --logdir "${DATADIR}/log" --outfile "${DATADIR}/config.json" --noedit;
 fi;
 
 storjshare start --config "${DATADIR}/config.json";
+
+# Run StorjMonitor if key provided
+if [ -n "${STORJSTAT_KEY}" ]; then
+	cd StorjMonitor;
+	sed -i "s/YOUR-TOKEN-HERE/${STORJSTAT_KEY}/g" storjMonitor.js;
+	node storjMonitor.js
+	cd -
+fi;
+
 wait;
