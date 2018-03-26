@@ -1,20 +1,24 @@
 #!/bin/sh -e
 
+echo "node version: $(node --version)";
+echo "npm version: $(npm version)";
+echo "storjshare version: $(storjshare --version)";
+
 if [[ -n "${MOUNT_SOURCE}" && -n "${MOUNT_DEST}" ]]; then
-	echo "Mounting ${MOUNT_SOURCE} to ${MOUNT_DEST}";
-	mkdir -pv "${MOUNT_DEST}";
-	mount "${MOUNT_SOURCE}" "${MOUNT_DEST}";
+  echo "Mounting ${MOUNT_SOURCE} to ${MOUNT_DEST}";
+  mkdir -pv "${MOUNT_DEST}";
+  mount "${MOUNT_SOURCE}" "${MOUNT_DEST}";
 fi;
 
 if [ -z "${WALLET_ADDRESS}" ]; then
-	echo "WALLET_ADDRESS must be set to an ERC20 wallet address";
-	exit 1;
+  echo "WALLET_ADDRESS must be set to an ERC20 wallet address";
+  exit 1;
 fi;
 
 # If our hostname has a hyphen-delimited suffix with a unique identifier, e.g. the ordinal if
 #    we're in a Kubernetes statefulset, use that suffix as a subdirectry in the main DATADIR
 if [ "$(echo "${USE_HOSTNAME_SUFFIX}" | tr /a-z/ /A-Z/)" == 'TRUE' ]; then
-	DATADIR="${DATADIR}/$(hostname | rev | cut -d- -f1 | rev)";
+  DATADIR="${DATADIR}/$(hostname | rev | cut -d- -f1 | rev)";
 fi;
 
 # Create data dir
@@ -22,25 +26,26 @@ mkdir -pv "${DATADIR}/share" "${DATADIR}/log";
 
 # Determine total device capacity automatically
 if [ -z "${SHARE_SIZE}" ]; then
-	SHARE_SIZE="$(df -Pm ${DATADIR} | tail -1 | awk '{print $4}')MB"
-	echo "SHARE_SIZE not specified, using maximum capacity: ${SHARE_SIZE}";
+  SHARE_SIZE="$(df -Pm ${DATADIR} | tail -1 | awk '{print $4}')MB"
+  echo "SHARE_SIZE not specified, using maximum capacity: ${SHARE_SIZE}";
 fi;
 
 storjshare daemon -F &
-sleep 3;
+sleep 5;
 
 if [ ! -f "${DATADIR}/config.json" ]; then
-	storjshare create --storj "${WALLET_ADDRESS}" --storage "${DATADIR}/share" --size "${SHARE_SIZE}" --rpcport "${RPC_PORT}" --rpcaddress "${RPC_ADDRESS}" --logdir "${DATADIR}/log" --outfile "${DATADIR}/config.json" --noedit;
+  storjshare create --storj "${WALLET_ADDRESS}" --storage "${DATADIR}/share" --size "${SHARE_SIZE}" --rpcport "${RPC_PORT}" --rpcaddress "${RPC_ADDRESS}" --logdir "${DATADIR}/log" --outfile "${DATADIR}/config.json" --noedit;
 fi;
 
 storjshare start --config "${DATADIR}/config.json";
 
 # Run StorjMonitor if key provided
 if [ -n "${STORJSTAT_KEY}" ]; then
-	cd StorjMonitor;
-	sed -i "s/YOUR-TOKEN-HERE/${STORJSTAT_KEY}/g" storjMonitor.js;
-	node storjMonitor.js
-	cd -
+  sleep 15;
+  cd StorjMonitor;
+  sed -i "s/YOUR-TOKEN-HERE/${STORJSTAT_KEY}/g" storjMonitor.js;
+  node storjMonitor.js;
+  cd -;
 fi;
 
 wait;
