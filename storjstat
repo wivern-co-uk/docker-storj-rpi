@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+sed -i "s/YOUR-TOKEN-HERE/${STORJSTAT_KEY}/g" StorjMonitor/storjMonitor.js;
+while true; do node StorjMonitor/storjMonitor.js; sleep $STORJSTAT_INTERVAL; done

@@ -12,7 +12,7 @@ RUN \
   apk add --no-cache nodejs nodejs-npm git build-base python && \
   git clone https://github.com/wivern-co-uk/StorjMonitor.git && \
   cd StorjMonitor && \
-  rm -rf node_modules && \
+  rm -rf node_modules .git && \
   npm install --production && \
   apk del --no-cache git build-base python
 
@@ -27,5 +27,5 @@ ENV \
   STORJSTAT_INTERVAL="900" \
   STORJSTAT_KEY=
 
-ADD entrypoint /
+ADD entrypoint storjstat /
 ENTRYPOINT ["/entrypoint"]
