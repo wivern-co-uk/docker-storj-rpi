@@ -44,7 +44,7 @@ if [ -n "${STORJSTAT_KEY}" ]; then
   sleep 15;
   cd StorjMonitor;
   sed -i "s/YOUR-TOKEN-HERE/${STORJSTAT_KEY}/g" storjMonitor.js;
-  node storjMonitor.js;
+  while true; do node storjMonitor.js; sleep $STORJSTAT_INTERVAL; done
   cd -;
 fi;
 

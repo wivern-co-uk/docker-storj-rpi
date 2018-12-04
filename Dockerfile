@@ -10,7 +10,7 @@ RUN \
 
 RUN \
   apk add --no-cache nodejs nodejs-npm git build-base python && \
-  git clone https://github.com/calxibe/StorjMonitor.git && \
+  git clone https://github.com/wivern-co-uk/StorjMonitor.git && \
   cd StorjMonitor && \
   rm -rf node_modules && \
   npm install --production && \
@@ -24,6 +24,7 @@ ENV \
   SHARE_SIZE= \
   RPC_ADDRESS="0.0.0.0" \
   RPC_PORT="80" \
+  STORJSTAT_INTERVAL="900" \
   STORJSTAT_KEY=
 
 ADD entrypoint /
