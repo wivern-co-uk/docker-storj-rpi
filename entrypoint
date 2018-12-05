@@ -30,7 +30,7 @@ if [ -z "${SHARE_SIZE}" ]; then
   echo "SHARE_SIZE not specified, using maximum capacity: ${SHARE_SIZE}";
 fi;
 
-/usr/bin/node /usr/lib/node_modules/storjshare-daemon/bin/storjshare-daemon.js -F &
+storjshare daemon -F &
 sleep 5;
 
 if [ ! -f "${DATADIR}/config.json" ]; then
