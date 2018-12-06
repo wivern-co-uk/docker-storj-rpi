@@ -1,4 +1,4 @@
-FROM easypi/alpine-arm:edge
+FROM easypi/alpine-arm:3.7
 
 RUN \
   apk add --no-cache nodejs nodejs-npm g++ gcc git make python && \
