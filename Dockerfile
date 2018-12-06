@@ -1,12 +1,12 @@
 FROM easypi/alpine-arm:edge
 
 RUN \
-  apk add --no-cache nodejs nodejs-npm g++ gcc git make bash python && \
+  apk add --no-cache nodejs nodejs-npm g++ gcc git make python && \
   export MAKEFLAGS=-j8 && \
   npm config set unsafe-perm true && \
   npm install --global storjshare-daemon && \
   npm cache clean --force && \
-  apk del --no-cache g++ gcc git make bash python
+  apk del --no-cache g++ gcc git make python
 
 RUN \
   apk add --no-cache nodejs nodejs-npm git build-base python && \
