@@ -30,7 +30,7 @@ if [ -z "${SHARE_SIZE}" ]; then
   echo "SHARE_SIZE not specified, using maximum capacity: ${SHARE_SIZE}";
 fi;
 
-storjshare daemon -F &
+/usr/bin/node /usr/lib/node_modules/storjshare-daemon/bin/storjshare-daemon.js -F &
 sleep 5;
 
 if [ ! -f "${DATADIR}/config.json" ]; then
@@ -41,7 +41,7 @@ storjshare start --config "${DATADIR}/config.json";
 
 # Run StorjMonitor if key provided
 if [ -n "${STORJSTAT_KEY}" ]; then
-  sleep 20;
+  sleep 30;
   sh storjstat &
 fi;
 
